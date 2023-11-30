@@ -20,6 +20,7 @@ public:
     }
 };
 
+
 // Convert an Array to a Linked List
 static Node* convertArrToLL(vector<int>& arr) {
     Node* head = new Node(arr[0]);
@@ -110,13 +111,13 @@ static Node* removesKthElement(Node* head, int k) {
             delete temp;
             break;
         }
-        prev = temp;
-        temp = temp->next;
-
-        if(temp->next == nullptr && counter < k-1) {
+        if(temp->next == nullptr && counter < k) {
             cout << "Invalid position to remove a Node.\n";
             break;
         }
+
+        prev = temp;
+        temp = temp->next;
     }
 
     return head;
@@ -152,6 +153,81 @@ static Node* removesTheValue(Node* head, int val) {
     return head;
 }
 
+// Insert a new Head into the Linked List
+static Node* insertHead(Node* head, int val) {
+    return new Node(val, head);
+}
+
+// Insert a new Tail at end of the Linked List
+static Node* insertTail(Node* head, int val) {
+    if(head == NULL) return new Node(val);
+
+    Node* temp = head;
+    while(temp->next != NULL) {
+        temp = temp->next;
+    }
+    Node* newNode = new Node(val);
+    temp->next = newNode;
+
+    return head;
+}
+
+// Insert a new Node at k-th position in the Linked List
+static Node* insertAtPositionK(Node* head, int val, int pos) {
+    if(head == NULL) {
+        if(pos == 1) {
+            return new Node(val);
+        } else {
+            cout << "Not a valid position for the Linked List!\n";
+            return head;
+        }
+    }
+
+    if(pos == 1) return new Node(val, head);
+
+    int counter = 0;
+    Node* temp = head;
+    while(temp != NULL) {
+        counter++;
+        if(counter == pos-1) {
+            Node* newNode = new Node(val, temp->next);
+            temp->next = newNode;
+            break;
+        }
+        if(temp->next == NULL && counter < pos-1) {
+            cout << "Not a valid position for the Linked List!\n";
+            break;
+        }
+        temp = temp->next;
+    }
+
+    return head;
+}
+
+// Insert a new Node before the value x in the Linked List
+static Node* insertBeforeValue(Node* head, int val, int x) {
+    if(head->data == x) return new Node(val, head);
+    if(head == NULL) return NULL;
+
+    Node* temp = head;
+    while(temp != NULL) {
+        if(temp->next->data == x) {
+            Node* newNode = new Node(val, temp->next);
+            temp->next = newNode;
+            break;
+        }
+        temp = temp->next;
+
+        if(temp->next == nullptr && temp->data != x) {
+            cout << x << " is not present in the Linked List!\n";
+            break;
+        }
+    }
+
+    return head;
+}
+
+
 
 int main()
 {
@@ -181,6 +257,18 @@ int main()
     printLL(head);
 
     head = removesTheValue(head, 29);
+    printLL(head);
+
+    head = insertHead(head, 510);
+    printLL(head);
+
+    head = insertTail(head, 99);
+    printLL(head);
+
+    head = insertAtPositionK(head, 777, 2);
+    printLL(head);
+
+    head = insertBeforeValue(head, 555, 8);
     printLL(head);
 
     return 0;
