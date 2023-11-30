@@ -67,10 +67,95 @@ static bool checkIfPresent(Node* head, int val) {
     return false;
 }
 
+// Deletion of the head Node
+static Node* removesHead(Node* head) {
+    if (head == NULL) return head;
+    Node* temp = head;
+    head = head->next;
+    delete temp;
+    return head;
+}
+
+// Delete the tail of the Linked List
+static Node* removesTail(Node* head) {
+    if (head == NULL) return head;
+
+    Node* temp = head;
+    while(temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = nullptr;
+
+    return head;
+}
+
+// Delete the k-th element of the Linked List
+static Node* removesKthElement(Node* head, int k) {
+    if(head == NULL) return head;
+    if(k == 1) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return head;
+    }
+
+    int counter = 0;
+    Node* temp = head;
+    Node* prev = NULL;
+    while(temp != NULL) {
+        counter++;
+        if(counter == k) {
+            prev->next = prev->next->next;
+            delete temp;
+            break;
+        }
+        prev = temp;
+        temp = temp->next;
+
+        if(temp->next == nullptr && counter < k-1) {
+            cout << "Invalid position to remove a Node.\n";
+            break;
+        }
+    }
+
+    return head;
+}
+
+// Delete the value from the Linked List
+static Node* removesTheValue(Node* head, int val) {
+    if(head == NULL) return head;
+    if(head->data == val) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return head;
+    }
+
+    Node* temp = head;
+    Node* prev = NULL;
+    while(temp != NULL) {
+        if(temp->data == val) {
+            prev->next = prev->next->next;
+            delete temp;
+            break;
+        }
+        prev = temp;
+        temp = temp->next;
+
+        if(temp->next == nullptr && temp->data != val) {
+            cout << "The value is not present in the Linked List.\n";
+            break;
+        }
+    }
+
+    return head;
+}
+
 
 int main()
 {
-    vector<int> arr = { 11, 5, 8, 17 };
+    vector<int> arr = { 11, 5, 8, 17, 29, 46, 30, 71 };
 
     /*
     Node* x = new Node(arr[1], nullptr); // directly giving the memory location of the given data
@@ -83,8 +168,20 @@ int main()
 
     Node* head = convertArrToLL(arr);
     printLL(head);
-    cout << "Length of the Linked List: " << lengthOfLL(head) << "\n";
-    cout << checkIfPresent(head, 5) << "\n";
+    // cout << "Length of the Linked List: " << lengthOfLL(head) << "\n";
+    // cout << checkIfPresent(head, 5) << "\n";
+
+    head = removesHead(head);
+    printLL(head);
+
+    head = removesTail(head);
+    printLL(head);
+
+    head = removesKthElement(head, 6);
+    printLL(head);
+
+    head = removesTheValue(head, 29);
+    printLL(head);
 
     return 0;
 }
